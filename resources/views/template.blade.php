@@ -29,7 +29,12 @@
                 <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/">Главная</a></li>
                 @auth
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/">Профиль</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/">Выход</a></li>
+                    <form id="logoutForm" action="/logout" method="post">
+                        @csrf
+                    </form>
+                    <li class="nav-item">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4" href="#" onclick="logoutForm.submit()">Выход</a>
+                    </li>
                 @else
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/login">Войти</a></li>
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/register">Регистрация</a></li>
