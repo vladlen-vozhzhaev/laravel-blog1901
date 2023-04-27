@@ -19,5 +19,8 @@ Route::post('/addComment', [ArticleController::class, 'addComment'])->middleware
 Route::get('/profile', [UserController::class, 'showProfile'])->middleware(['auth']);
 Route::post('/updateUserData', [UserController::class, 'updateUserData'])->middleware(['auth']);
 Route::post('/changeUserAvatar', [UserController::class, 'changeUserAvatar'])->middleware(['auth']);
-
+Route::get('/deleteComment/{id}', [ArticleController::class, 'deleteComment'])->middleware(['auth']);
+Route::get('/secret', function (){
+   return "Hello world";
+})->middleware(['auth', 'admin']);
 require __DIR__.'/auth.php';

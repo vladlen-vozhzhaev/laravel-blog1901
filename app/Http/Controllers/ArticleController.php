@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\BindRole;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,10 @@ class ArticleController extends Controller
         $articleId = $request->id;
         $article = Article::where('id', $articleId)->first();
         $comments = Comment::where('article_id', $articleId)->get(); // Получаем все записи
-        return view('pages.article', ['article'=>$article, 'comments'=>$comments]);
+        $userId = auth()->user()->getAuthIdentifier();
+        $bindRole = BindRole::where('user_id', $userId)->first();
+        $isAdmin = $bindRole->role_id == 2; // процедура сравнения возвращает boolean
+        return view('pages.article', ['article'=>$article, 'comments'=>$comments, 'isAdmin'=>$isAdmin]);
     }
     public function addComment(Request $request){
         $userId = auth()->user()->getAuthIdentifier();
@@ -42,5 +46,17 @@ class ArticleController extends Controller
             $article->author = \App\Models\User::where('id', $authorId)->first();
         }
         return view('pages.mainPage', ['articles'=>$articles]);
+    }
+    public function deleteComment(Request $request){
+        $commentId = $request->id;
+        $comment = Comment::where('id', $commentId)->first();
+        $userId = auth()->user()->getAuthIdentifier();
+        $bindRole = BindRole::where('user_id', $userId)->first();
+        $isAdmin = $bindRole->role_id == 2; // процедура сравнения возвращает boolean
+        if($isAdmin or $userId == $comment->user_id){
+            $comment->delete();
+        }
+        $articleId = $comment->article_id;
+        return redirect()->intended('/article/'.$articleId);
     }
 }

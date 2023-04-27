@@ -25,7 +25,14 @@
         @foreach($comments as $comment)
             <div class="card mb-3">
                 <div class="card-header">
-                    {{$comment->user_id}}
+                    <div class="row">
+                        <div class="col-6">{{$comment->user_id}}</div>
+                        @if($isAdmin or auth()->user()->getAuthIdentifier() == $comment->user_id)
+                            <div class="col-6 text-end">
+                                <a href="/deleteComment/{{$comment->id}}">X</a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 <div class="card-body">
                     <p class="card-text m-0">
